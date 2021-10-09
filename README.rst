@@ -25,6 +25,13 @@ The library can be imported in the usual ways::
     import additive
     from additive import *
 
+Conventions
+-----------
+Style conventions are enforced using `Pylint <https://www.pylint.org/>`_::
+
+    python -m pip install pylint
+    pylint additive
+
 Contributions
 -------------
 In order to contribute to the source code, open an issue or submit a pull request on the `GitHub page <https://github.com/nthparty/additive>`_ for this library.

@@ -157,7 +157,7 @@ def shares(
     Convert an integer into two or more secret shares constructed
     according to the supplied parameters.
     """
-    value = share._value_from_parameters(
+    value = share._value_from_parameters( # pylint: disable=W0212
         value, exponent, signed
     )
 
@@ -165,12 +165,12 @@ def shares(
     for _ in range(quantity - 1):
         bs = secrets.token_bytes(exponent)
         v = int.from_bytes(bs, 'little') % (2 ** exponent)
-        ss.append(share._from_parameters(
+        ss.append(share._from_parameters( # pylint: disable=W0212
             v, exponent, signed
         ))
         t = (t + v) % (2 ** exponent)
 
-    ss.append(share._from_parameters(
+    ss.append(share._from_parameters( # pylint: disable=W0212
         (value + ((2 ** exponent) - t)) % (2 ** exponent),
         exponent, signed
     ))
