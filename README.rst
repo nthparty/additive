@@ -4,11 +4,15 @@ additive
 
 Data structure for representing additive secret shares of integers, designed for use within secure multi-party computation (MPC) protocol implementations.
 
-|pypi| |travis| |coveralls|
+|pypi| |readthedocs| |travis| |coveralls|
 
 .. |pypi| image:: https://badge.fury.io/py/additive.svg
    :target: https://badge.fury.io/py/additive
    :alt: PyPI version and link.
+
+.. |readthedocs| image:: https://readthedocs.org/projects/additive/badge/?version=latest
+   :target: https://additive.readthedocs.io/en/latest/?badge=latest
+   :alt: Read the Docs documentation status.
 
 .. |travis| image:: https://app.travis-ci.com/nthparty/additive.svg?branch=main
    :target: https://app.travis-ci.com/nthparty/additive
