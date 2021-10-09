@@ -12,6 +12,21 @@ import secrets
 class share:
     """
     Data structure for additive secret shares of an integer.
+
+    >>> share(123)
+    share(123, 32, False)
+    >>> share(2**32 - 1, 32)
+    share(4294967295, 32, False)
+    >>> share(-(2**31), exponent=32, signed=True)
+    share(0, 32, True)
+    >>> share(2**32, 32)
+    Traceback (most recent call last):
+      ...
+    ValueError: value is not in range that can be represented using supplied parameters
+    >>> share(123, 12)
+    Traceback (most recent call last):
+      ...
+    ValueError: exponent must be a positive multiple of 8 that is at most 128
     """
     def __init__(
             self: share, value: int,
@@ -62,6 +77,13 @@ class share:
         """
         Convert a share instance represented as a bytes-like object
         into a share object.
+
+        >>> share.from_bytes(bytes([32, 1] + ([0] * 31)))
+        share(1, 16, False)
+        >>> share.from_bytes(bytes([12, 1] + ([0] * 31)))
+        Traceback (most recent call last):
+          ...
+        ValueError: invalid exponent in binary encoding of share
         """
         exponent =  (bs[0] + 1) >> 1
         if exponent <= 0 or exponent % 8 != 0:
@@ -78,6 +100,9 @@ class share:
         """
         Convert a share instance represented as a Base64 encoding of
         a bytes-like object into a share object.
+
+        >>> share.from_base64('IAEAAAA=')
+        share(1, 16, False)
         """
         return share.from_bytes(base64.standard_b64decode(s))
 
@@ -85,6 +110,19 @@ class share:
         """
         Add two share instances (with base case support for
         the Python `sum` operator).
+
+        >>> (s, t) = shares(123)
+        >>> s + t
+        share(123, 32, False)
+        >>> (s + t) + 0
+        share(123, 32, False)
+        >>> ((a, b), (c, d)) = (shares(123), shares(456))
+        >>> ((a + c) + (b + d)).to_int()
+        579
+        >>> share(0, 8) + share(0, 16)
+        Traceback (most recent call last):
+          ...
+        ValueError: shares must have compatible parameters to be added
         """
         if isinstance(other, int) and other == 0:
             return self
@@ -105,23 +143,41 @@ class share:
         """
         Add two share instances (with base case support for
         the Python `sum` operator).
+
+        >>> (s, t) = shares(123)
+        >>> s + t
+        share(123, 32, False)
+        >>> 0 + (s + t)
+        share(123, 32, False)
+        >>> sum(shares(123, 10))
+        share(123, 32, False)
         """
         if isinstance(other, int) and other == 0:
             return self
 
-        return other + self
+        return other + self # pragma: no cover
 
     def to_int(self: share) -> int:
         """
         Obtain the integer value represented by a fully reconstructed
         aggregate share (no checking is performed that a share is fully
         reconstructed).
+
+        >>> (s, t) = shares(123)
+        >>> (s + t).to_int()
+        123
+        >>> (r, s, t) = shares(-123, 3, signed=True)
+        >>> sum([r, s, t]).to_int()
+        -123
         """
         return self.value - (2 ** (self.exponent - 1)) if self.signed else self.value
 
     def to_bytes(self: share) -> bytes:
         """
         Return this share object encoded as a bytes-like object.
+
+        >>> share.from_base64('IAEAAAA=').to_bytes().hex()
+        '1e0100'
         """
         return \
             bytes([((self.exponent - 1) << 1) + int(self.signed)]) + \
@@ -130,12 +186,21 @@ class share:
     def to_base64(self: share) -> str:
         """
         Return this share instance as a Base64 string.
+
+        >>> share(123, 128).to_base64()
+        '/nsAAAAAAAAAAAAAAAAAAAA='
+        >>> ss = [s.to_base64() for s in shares(-123, signed=True)]
+        >>> sum(share.from_base64(s) for s in ss).to_int()
+        -123
         """
         return base64.standard_b64encode(self.to_bytes()).decode('utf-8')
 
     def __str__(self: share) -> str:
         """
         Return string representation of share object.
+
+        >>> str(share(123))
+        'share(123, 32, False)'
         """
         return 'share(' + ', '.join([
             str(self.value),
@@ -146,6 +211,9 @@ class share:
     def __repr__(self: share) -> str:
         """
         Return string representation of share object.
+
+        >>> share(123)
+        share(123, 32, False)
         """
         return str(self)
 
@@ -156,6 +224,21 @@ def shares(
     """
     Convert an integer into two or more secret shares constructed
     according to the supplied parameters.
+
+    >>> (s, t) = shares(123)
+    >>> (s + t).to_int()
+    123
+    >>> ss = shares(123, 20)
+    >>> len(ss)
+    20
+    >>> sum(ss).to_int()
+    123
+    >>> all(isinstance(s, share) for s in shares(123))
+    True
+    >>> shares(123, 2, 129)
+    Traceback (most recent call last):
+      ...
+    ValueError: exponent must be a positive multiple of 8 that is at most 128
     """
     value = share._value_from_parameters( # pylint: disable=W0212
         value, exponent, signed
@@ -178,4 +261,4 @@ def shares(
     return ss
 
 if __name__ == "__main__":
-    doctest.testmod()
+    doctest.testmod() # pragma: no cover
