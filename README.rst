@@ -33,6 +33,41 @@ The library can be imported in the usual ways::
     import additive
     from additive import *
 
+Examples
+^^^^^^^^
+This library makes it possible to concisely construct multiple secret shares from an integer::
+
+    >>> from additive import shares
+    >>> (a, b) = shares(123)
+    >>> (c, d) = shares(456)
+    >>> ((a + c) + (b + d)).to_int()
+    579
+
+It is possible to specify the exponent in the order of the finite field used to represent secret shares, as well as whether the encoding of the integer should support signed integers::
+
+    >>> (s, t) = shares(-123, exponent=8, signed=True)
+    >>> (s + t).to_int()
+    -123
+
+The number of shares can be specified explicitly (the default is two shares)::
+
+    >>> (r, s, t) = shares(123, quantity=3)
+
+The `share` data structure supports Python's built-in addition operators in order to enable both operations on shares and concise reconstruction of values from a collection of secret shares::
+
+    >>> (r + s + t).to_int()
+    123
+    >>> sum([r, s, t]).to_int()
+    123
+
+In addition, conversion methods for Base64 strings and bytes-like objects are included to support encoding and decoding of ``share`` objects::
+
+    >>> from additive import share
+    >>> share.from_base64('IAEAAAA=').to_bytes().hex()
+    '1e0100'
+    >>> [s.to_base64() for s in shares(123)]
+    ['PvmKMG8=', 'PoJ1z5A=']
+
 Documentation
 -------------
 .. include:: toc.rst

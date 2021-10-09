@@ -1,5 +1,5 @@
 """
-Data structure for integers that supports additive secret sharing,
+Data structure for representing additive secret shares of integers,
 designed for use within secure multi-party computation (MPC) protocol
 implementations.
 """
@@ -11,7 +11,26 @@ import secrets
 
 class share:
     """
-    Data structure for additive secret shares of an integer.
+    Data structure for representing an additive secret share of an integer.
+
+    :param value: Integer value to be split into secret shares.
+    :param exponent: Exponent in finite field order of ``2 ** exponent``
+        that is at least ``8``, at most ``128``, and is a multiple of ``8``.
+    :param signed: Flag indicating whether ``value`` is a signed integer;
+        this flag affects the specific way in which a secret share is
+        represented internally and shifts the range of integer values that
+        can be represented from ``range(0, 2 ** exponent)`` to
+        ``[-(2 ** (exponent - 1)), (2 ** (exponent - 1)) - 1)``.
+
+    Normally, the :obj:`shares` function should be used to construct a list
+    of :obj:`share` objects that have correct internal structure.
+
+    >>> ((a, b), (c, d)) = (shares(123), shares(456))
+    >>> ((a + c) + (b + d)).to_int()
+    579
+
+    Direct construction of :obj:`share` objects is made available to enable
+    other use cases, protocols, and/or extensions.
 
     >>> share(123)
     share(123, 32, False)
@@ -19,6 +38,10 @@ class share:
     share(4294967295, 32, False)
     >>> share(-(2**31), exponent=32, signed=True)
     share(0, 32, True)
+
+    Some compatibility and validity checks of the supplied parameter values
+    are performed.
+
     >>> share(2**32, 32)
     Traceback (most recent call last):
       ...
@@ -63,7 +86,7 @@ class share:
             exponent: Optional[int] = 32, signed: Optional[bool] = False
         ) -> share:
         """
-        Internal method for constructing a share object without conducting
+        Internal method for constructing a :obj:`share` object without conducting
         any checks.
         """
         self = cls.__new__(cls)
@@ -75,11 +98,14 @@ class share:
     @staticmethod
     def from_bytes(bs: Union[bytes, bytearray]) -> share:
         """
-        Convert a share instance represented as a bytes-like object
-        into a share object.
+        Convert a secret share represented as a bytes-like object
+        into a :obj:`share` object.
 
         >>> share.from_bytes(bytes([32, 1] + ([0] * 31)))
         share(1, 16, False)
+
+        An attempt to decode an invalid binary representation raises an exception.
+
         >>> share.from_bytes(bytes([12, 1] + ([0] * 31)))
         Traceback (most recent call last):
           ...
@@ -98,8 +124,8 @@ class share:
     @staticmethod
     def from_base64(s: str) -> share:
         """
-        Convert a share instance represented as a Base64 encoding of
-        a bytes-like object into a share object.
+        Convert a secret share represented as a Base64 encoding of
+        a bytes-like object into a :obj:`share` object.
 
         >>> share.from_base64('IAEAAAA=')
         share(1, 16, False)
@@ -108,8 +134,9 @@ class share:
 
     def __add__(self: share, other: Union[share, int]) -> share:
         """
-        Add two share instances (with base case support for
-        the Python `sum` operator).
+        Add two secret shares (represented as :obj:`share` objects);
+        ``0`` is supported as an input to accommodate the base case
+        required by the Python ``sum`` operator.
 
         >>> (s, t) = shares(123)
         >>> s + t
@@ -119,6 +146,11 @@ class share:
         >>> ((a, b), (c, d)) = (shares(123), shares(456))
         >>> ((a + c) + (b + d)).to_int()
         579
+
+        An attempt to add secret shares that are represented using
+        different finite fields (or are not all signed/unsigned)
+        raises an exception.
+
         >>> share(0, 8) + share(0, 16)
         Traceback (most recent call last):
           ...
@@ -141,8 +173,9 @@ class share:
 
     def __radd__(self: share, other: Union[share, int]) -> share:
         """
-        Add two share instances (with base case support for
-        the Python `sum` operator).
+        Add two secret shares (represented as :obj:`share` objects);
+        ``0`` is supported as an input to accommodate the base case
+        required by the Python ``sum`` operator.
 
         >>> (s, t) = shares(123)
         >>> s + t
@@ -160,8 +193,8 @@ class share:
     def to_int(self: share) -> int:
         """
         Obtain the integer value represented by a fully reconstructed
-        aggregate share (no checking is performed that a share is fully
-        reconstructed).
+        aggregate of secret shares (no checking is performed that the
+        :obj:`share` object represents a complete reconstruction).
 
         >>> (s, t) = shares(123)
         >>> (s + t).to_int()
@@ -174,7 +207,7 @@ class share:
 
     def to_bytes(self: share) -> bytes:
         """
-        Return this share object encoded as a bytes-like object.
+        Return a bytes-like object that encodes this :obj:`share` object.
 
         >>> share.from_base64('IAEAAAA=').to_bytes().hex()
         '1e0100'
@@ -185,7 +218,7 @@ class share:
 
     def to_base64(self: share) -> str:
         """
-        Return this share instance as a Base64 string.
+        Return a Base64 string representation of this :obj:`share` object.
 
         >>> share(123, 128).to_base64()
         '/nsAAAAAAAAAAAAAAAAAAAA='
@@ -197,7 +230,7 @@ class share:
 
     def __str__(self: share) -> str:
         """
-        Return string representation of share object.
+        Return string representation of this :obj:`share` object.
 
         >>> str(share(123))
         'share(123, 32, False)'
@@ -210,7 +243,7 @@ class share:
 
     def __repr__(self: share) -> str:
         """
-        Return string representation of share object.
+        Return string representation of this :obj:`share` object.
 
         >>> share(123)
         share(123, 32, False)
@@ -225,6 +258,17 @@ def shares(
     Convert an integer into two or more secret shares constructed
     according to the supplied parameters.
 
+    :param value: Integer value to be split into secret shares.
+    :param quantity: Number of secret shares (at least two) to construct
+        and return.
+    :param exponent: Exponent in finite field order of ``2 ** exponent``
+        that is at least ``8``, at most ``128``, and is a multiple of ``8``.
+    :param signed: Flag indicating whether ``value`` is a signed integer;
+        this flag affects the specific way in which a secret share is
+        represented internally and shifts the range of integer values that
+        can be represented from ``{0, ..., (2 ** exponent) - 1}`` to
+        ``{-(2 ** (exponent - 1)), ..., (2 ** (exponent - 1)) - 1}``.
+
     >>> (s, t) = shares(123)
     >>> (s + t).to_int()
     123
@@ -235,6 +279,10 @@ def shares(
     123
     >>> all(isinstance(s, share) for s in shares(123))
     True
+
+    Some compatibility and validity checks of the supplied parameter values
+    are performed.
+
     >>> shares(123, 2, 129)
     Traceback (most recent call last):
       ...
