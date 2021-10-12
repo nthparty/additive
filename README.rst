@@ -67,7 +67,7 @@ The `share` data structure supports Python's built-in addition operators in orde
 In addition, conversion methods for Base64 strings and bytes-like objects are included to support encoding and decoding of ``share`` objects::
 
     >>> from additive import share
-    >>> share.from_base64('IAEAAAA=').to_bytes().hex()
+    >>> share.from_base64('HgEA').to_bytes().hex()
     '1e0100'
     >>> [s.to_base64() for s in shares(123)]
     ['PvmKMG8=', 'PoJ1z5A=']

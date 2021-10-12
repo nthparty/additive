@@ -211,6 +211,9 @@ class share:
 
         >>> share.from_base64('HgEA').to_bytes().hex()
         '1e0100'
+        >>> ss = [s.to_bytes() for s in shares(123)]
+        >>> sum(share.from_bytes(s) for s in ss).to_int()
+        123
         """
         return \
             bytes([((self.exponent - 1) << 1) + int(self.signed)]) + \
