@@ -101,7 +101,7 @@ class share:
         Convert a secret share represented as a bytes-like object
         into a :obj:`share` object.
 
-        >>> share.from_bytes(bytes([32, 1] + ([0] * 31)))
+        >>> share.from_bytes(bytes([30, 1] + ([0] * 31)))
         share(1, 16, False)
 
         An attempt to decode an invalid binary representation raises an exception.
@@ -111,7 +111,7 @@ class share:
           ...
         ValueError: invalid exponent in binary encoding of share
         """
-        exponent =  (bs[0] + 1) >> 1
+        exponent =  (bs[0] >> 1) + 1
         if exponent <= 0 or exponent % 8 != 0:
             raise ValueError('invalid exponent in binary encoding of share')
 
@@ -127,7 +127,7 @@ class share:
         Convert a secret share represented as a Base64 encoding of
         a bytes-like object into a :obj:`share` object.
 
-        >>> share.from_base64('IAEAAAA=')
+        >>> share.from_base64('HgEA')
         share(1, 16, False)
         """
         return share.from_bytes(base64.standard_b64decode(s))
@@ -209,7 +209,7 @@ class share:
         """
         Return a bytes-like object that encodes this :obj:`share` object.
 
-        >>> share.from_base64('IAEAAAA=').to_bytes().hex()
+        >>> share.from_base64('HgEA').to_bytes().hex()
         '1e0100'
         """
         return \
