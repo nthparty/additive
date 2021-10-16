@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>additive module &mdash; additive 0.1.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="additive" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> additive
+          </a>
+              <div class="version">
+                0.1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">additive module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">additive</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>additive module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_source/additive.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-additive.additive">
+<span id="additive-module"></span><h1>additive module<a class="headerlink" href="#module-additive.additive" title="Permalink to this headline"></a></h1>
+<p>Data structure for representing additive secret shares of integers,
+designed for use within secure multi-party computation (MPC) protocol
+implementations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="additive.additive.share">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">additive.additive.</span></span><span class="sig-name descname"><span class="pre">share</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#additive.additive.share" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data structure for representing an additive secret share of an integer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – Integer value to be split into secret shares.</p></li>
+<li><p><strong>exponent</strong> – Exponent in finite field order of <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">**</span> <span class="pre">exponent</span></code>
+that is at least <code class="docutils literal notranslate"><span class="pre">8</span></code>, at most <code class="docutils literal notranslate"><span class="pre">128</span></code>, and is a multiple of <code class="docutils literal notranslate"><span class="pre">8</span></code>.</p></li>
+<li><p><strong>signed</strong> – Flag indicating whether <code class="docutils literal notranslate"><span class="pre">value</span></code> is a signed integer;
+this flag affects the specific way in which a secret share is
+represented internally and shifts the range of integer values that
+can be represented from <code class="docutils literal notranslate"><span class="pre">range(0,</span> <span class="pre">2</span> <span class="pre">**</span> <span class="pre">exponent)</span></code> to
+<code class="docutils literal notranslate"><span class="pre">[-(2</span> <span class="pre">**</span> <span class="pre">(exponent</span> <span class="pre">-</span> <span class="pre">1)),</span> <span class="pre">(2</span> <span class="pre">**</span> <span class="pre">(exponent</span> <span class="pre">-</span> <span class="pre">1))</span> <span class="pre">-</span> <span class="pre">1)</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Normally, the <a class="reference internal" href="#additive.additive.shares" title="additive.additive.shares"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shares</span></code></a> function should be used to construct a list
+of <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> objects that have correct internal structure.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span> <span class="o">=</span> <span class="p">(</span><span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">),</span> <span class="n">shares</span><span class="p">(</span><span class="mi">456</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">d</span><span class="p">))</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">579</span>
+</pre></div>
+</div>
+<p>Direct construction of <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> objects is made available to enable
+other use cases, protocols, and/or extensions.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="go">share(123, 32, False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="go">share(4294967295, 32, False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="p">),</span> <span class="n">exponent</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">share(0, 32, True)</span>
+</pre></div>
+</div>
+<p>Some compatibility and validity checks of the supplied parameter values
+are performed.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">value is not in range that can be represented using supplied parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">exponent must be a positive multiple of 8 that is at most 128</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.from_bytes">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">from_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">,</span> </span><span class="pre">bytearray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><span class="pre">additive.additive.share</span></a></span></span><a class="headerlink" href="#additive.additive.share.from_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a secret share represented as a bytes-like object
+into a <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="nb">bytes</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">31</span><span class="p">)))</span>
+<span class="go">share(1, 16, False)</span>
+</pre></div>
+</div>
+<p>An attempt to decode an invalid binary representation raises an exception.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="nb">bytes</span><span class="p">([</span><span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">31</span><span class="p">)))</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">invalid exponent in binary encoding of share</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.from_base64">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">from_base64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><span class="pre">additive.additive.share</span></a></span></span><a class="headerlink" href="#additive.additive.share.from_base64" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a secret share represented as a Base64 encoding of
+a bytes-like object into a <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="o">.</span><span class="n">from_base64</span><span class="p">(</span><span class="s1">&#39;HgEA&#39;</span><span class="p">)</span>
+<span class="go">share(1, 16, False)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><span class="pre">additive.additive.share</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><span class="pre">additive.additive.share</span></a></span></span><a class="headerlink" href="#additive.additive.share.__add__" title="Permalink to this definition"></a></dt>
+<dd><p>Add two secret shares (represented as <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> objects);
+<code class="docutils literal notranslate"><span class="pre">0</span></code> is supported as an input to accommodate the base case
+required by the Python <code class="docutils literal notranslate"><span class="pre">sum</span></code> operator.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">+</span> <span class="n">t</span>
+<span class="go">share(123, 32, False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">0</span>
+<span class="go">share(123, 32, False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">((</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span> <span class="o">=</span> <span class="p">(</span><span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">),</span> <span class="n">shares</span><span class="p">(</span><span class="mi">456</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="n">d</span><span class="p">))</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">579</span>
+</pre></div>
+</div>
+<p>An attempt to add secret shares that are represented using
+different finite fields (or are not all signed/unsigned)
+raises an exception.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">+</span> <span class="n">share</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">shares must have compatible parameters to be added</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.__radd__">
+<span class="sig-name descname"><span class="pre">__radd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><span class="pre">additive.additive.share</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><span class="pre">additive.additive.share</span></a></span></span><a class="headerlink" href="#additive.additive.share.__radd__" title="Permalink to this definition"></a></dt>
+<dd><p>Add two secret shares (represented as <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> objects);
+<code class="docutils literal notranslate"><span class="pre">0</span></code> is supported as an input to accommodate the base case
+required by the Python <code class="docutils literal notranslate"><span class="pre">sum</span></code> operator.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">+</span> <span class="n">t</span>
+<span class="go">share(123, 32, False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">0</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span>
+<span class="go">share(123, 32, False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="go">share(123, 32, False)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.to_int">
+<span class="sig-name descname"><span class="pre">to_int</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#additive.additive.share.to_int" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain the integer value represented by a fully reconstructed
+aggregate of secret shares (no checking is performed that the
+<a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> object represents a complete reconstruction).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">123</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">shares</span><span class="p">(</span><span class="o">-</span><span class="mi">123</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">([</span><span class="n">r</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">])</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">-123</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.to_bytes">
+<span class="sig-name descname"><span class="pre">to_bytes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="headerlink" href="#additive.additive.share.to_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Return a bytes-like object that encodes this <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="o">.</span><span class="n">from_base64</span><span class="p">(</span><span class="s1">&#39;HgEA&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
+<span class="go">&#39;1e0100&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">share</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ss</span><span class="p">)</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">123</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.to_base64">
+<span class="sig-name descname"><span class="pre">to_base64</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#additive.additive.share.to_base64" title="Permalink to this definition"></a></dt>
+<dd><p>Return a Base64 string representation of this <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">to_base64</span><span class="p">()</span>
+<span class="go">&#39;/nsAAAAAAAAAAAAAAAAAAAA=&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">to_base64</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shares</span><span class="p">(</span><span class="o">-</span><span class="mi">123</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">share</span><span class="o">.</span><span class="n">from_base64</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ss</span><span class="p">)</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">-123</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#additive.additive.share.__str__" title="Permalink to this definition"></a></dt>
+<dd><p>Return string representation of this <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">share</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="go">&#39;share(123, 32, False)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="additive.additive.share.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#additive.additive.share.__repr__" title="Permalink to this definition"></a></dt>
+<dd><p>Return string representation of this <a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">share</span></code></a> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">share</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="go">share(123, 32, False)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="additive.additive.shares">
+<span class="sig-prename descclassname"><span class="pre">additive.additive.</span></span><span class="sig-name descname"><span class="pre">shares</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exponent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#additive.additive.share" title="additive.additive.share"><span class="pre">additive.additive.share</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#additive.additive.shares" title="Permalink to this definition"></a></dt>
+<dd><p>Convert an integer into two or more secret shares constructed
+according to the supplied parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value</strong> – Integer value to be split into secret shares.</p></li>
+<li><p><strong>quantity</strong> – Number of secret shares (at least two) to construct
+and return.</p></li>
+<li><p><strong>exponent</strong> – Exponent in finite field order of <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">**</span> <span class="pre">exponent</span></code>
+that is at least <code class="docutils literal notranslate"><span class="pre">8</span></code>, at most <code class="docutils literal notranslate"><span class="pre">128</span></code>, and is a multiple of <code class="docutils literal notranslate"><span class="pre">8</span></code>.</p></li>
+<li><p><strong>signed</strong> – Flag indicating whether <code class="docutils literal notranslate"><span class="pre">value</span></code> is a signed integer;
+this flag affects the specific way in which a secret share is
+represented internally and shifts the range of integer values that
+can be represented from <code class="docutils literal notranslate"><span class="pre">{0,</span> <span class="pre">...,</span> <span class="pre">(2</span> <span class="pre">**</span> <span class="pre">exponent)</span> <span class="pre">-</span> <span class="pre">1}</span></code> to
+<code class="docutils literal notranslate"><span class="pre">{-(2</span> <span class="pre">**</span> <span class="pre">(exponent</span> <span class="pre">-</span> <span class="pre">1)),</span> <span class="pre">...,</span> <span class="pre">(2</span> <span class="pre">**</span> <span class="pre">(exponent</span> <span class="pre">-</span> <span class="pre">1))</span> <span class="pre">-</span> <span class="pre">1}</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">123</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ss</span> <span class="o">=</span> <span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span>
+<span class="go">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span><span class="o">.</span><span class="n">to_int</span><span class="p">()</span>
+<span class="go">123</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">share</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Some compatibility and validity checks of the supplied parameter values
+are performed.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">shares</span><span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">129</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">exponent must be a positive multiple of 8 that is at most 128</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="additive" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Nth Party, Ltd.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
