@@ -60,7 +60,7 @@ class share:
         self.signed = signed
 
     @staticmethod
-    def _value_from_parameters(value: int, exponent: int, signed: bool):
+    def _value_from_parameters(value: int, exponent: int, signed: bool) -> int:
         """
         Confirm that supplied parameters are compatible and return an
         appropriate positive integer representation of the supplied value.
