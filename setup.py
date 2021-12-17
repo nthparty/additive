@@ -5,7 +5,7 @@ with open("README.rst", "r") as fh:
 
 # The lines below can be parsed by `docs/conf.py`.
 name = "additive"
-version = "0.1.1"
+version = "0.2.0"
 
 setup(
     name=name,
