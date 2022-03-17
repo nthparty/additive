@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>additive &mdash; additive 0.2.0 documentation</title>
+  <title>additive &mdash; additive 0.3.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -29,7 +29,7 @@
             <a href="#" class="icon icon-home"> additive
           </a>
               <div class="version">
-                0.2.0
+                0.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -140,9 +140,9 @@
 </section>
 <section id="testing-and-conventions">
 <h2>Testing and Conventions<a class="headerlink" href="#testing-and-conventions" title="Permalink to this headline"></a></h2>
-<p>All unit tests are executed and their coverage is measured when using <a class="reference external" href="https://nose.readthedocs.io/">nose</a> (see <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> for configuration details):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nose</span> <span class="n">coverage</span>
-<span class="n">nosetests</span> <span class="o">--</span><span class="n">cover</span><span class="o">-</span><span class="n">erase</span>
+<p>All unit tests are executed and their coverage is measured when using <a class="reference external" href="https://docs.pytest.org/">pytest</a> (see <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> for configuration details):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pytest</span> <span class="n">pytest</span><span class="o">-</span><span class="n">cov</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pytest</span>
 </pre></div>
 </div>
 <p>Alternatively, all unit tests are included in the module itself and can be executed using <a class="reference external" href="https://docs.python.org/3/library/doctest.html">doctest</a>:</p>
@@ -151,7 +151,7 @@
 </div>
 <p>Style conventions are enforced using <a class="reference external" href="https://www.pylint.org/">Pylint</a>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pylint</span>
-<span class="n">pylint</span> <span class="n">additive</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pylint</span> <span class="n">additive</span>
 </pre></div>
 </div>
 </section>
@@ -162,6 +162,20 @@
 <section id="versioning">
 <h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline"></a></h2>
 <p>The version number format for this library and the changes to the library associated with version number increments conform with <a class="reference external" href="https://semver.org/#semantic-versioning-200">Semantic Versioning 2.0.0</a>.</p>
+</section>
+<section id="publishing">
+<h2>Publishing<a class="headerlink" href="#publishing" title="Permalink to this headline"></a></h2>
+<p>This library can be published as a <a class="reference external" href="https://pypi.org/project/additive/">package on PyPI</a> by a package maintainer. Install the <a class="reference external" href="https://pypi.org/project/wheel/">wheel</a> package, remove any old build/distribution files, and package the source into a distribution archive:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">wheel</span>
+<span class="n">rm</span> <span class="o">-</span><span class="n">rf</span> <span class="n">dist</span> <span class="o">*.</span><span class="n">egg</span><span class="o">-</span><span class="n">info</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">sdist</span> <span class="n">bdist_wheel</span>
+</pre></div>
+</div>
+<p>Next, install the <a class="reference external" href="https://pypi.org/project/twine/">twine</a> package and upload the package distribution archive to PyPI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">twine</span>
+<span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">twine</span> <span class="n">upload</span> <span class="n">dist</span><span class="o">/*</span>
+</pre></div>
+</div>
 </section>
 </section>
 
