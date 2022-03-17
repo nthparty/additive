@@ -5,7 +5,7 @@ with open("README.rst", "r") as fh:
 
 # The lines below can be parsed by `docs/conf.py`.
 name = "additive"
-version = "0.2.0"
+version = "0.3.0"
 
 setup(
     name=name,
@@ -21,6 +21,4 @@ setup(
                 "implementations.",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    test_suite="nose.collector",
-    tests_require=["nose"],
 )
