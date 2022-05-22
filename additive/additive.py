@@ -153,6 +153,27 @@ class share:
         >>> sum(sum(ss) for ss in zip(*ts)).to_int()
         -1368
 
+        When secret shares are added, it is not possible to determine
+        whether the sum of the values they represent exceeds the maximum
+        value that can be represented. If the sum does exceed the value,
+        then the value reconstructed from the shares will wrap around.
+        In the case of unsigned integer values, this corresponds to the
+        usual behavior of field elements.
+
+        >>> (a, b) = shares(255, exponent=8) # Unsigned one-byte integer.
+        >>> (c, d) = shares(123, exponent=8) # Unsigned one-byte integer.
+        >>> ((a + c) + (b + d)).to_int() == (255 + 123) % 256 == 122
+        True
+
+        In the case of signed integers, the values will wrap from positive
+        to negative (in a manner similar to that of typical implementations
+        of signed integer addition in other popular languages and libraries).
+
+        >>> (a, b) = shares(127, exponent=8, signed=True)
+        >>> (c, d) = shares(2, exponent=8, signed=True)
+        >>> ((a + c) + (b + d)).to_int() == -127
+        True
+
         An attempt to add secret shares that are represented using
         different finite fields (or are not all signed/unsigned)
         raises an exception.
@@ -316,13 +337,25 @@ def shares(
     >>> all(isinstance(s, share) for s in shares(123))
     True
 
-    Some compatibility and validity checks of the supplied parameter values
-    are performed.
+    Some compatibility and validity checks of the integer value and the parameter
+    values are performed.
 
-    >>> shares(123, 2, 129)
+    >>> shares(123, 2, exponent=129)
     Traceback (most recent call last):
       ...
     ValueError: exponent must be a positive multiple of 8 that is at most 128
+    >>> shares(256, 2, exponent=8)
+    Traceback (most recent call last):
+      ...
+    ValueError: value is not in range that can be represented using supplied parameters
+    >>> shares(128, 2, exponent=8, signed=True)
+    Traceback (most recent call last):
+      ...
+    ValueError: value is not in range that can be represented using supplied parameters
+    >>> shares(-129, 2, exponent=8, signed=True)
+    Traceback (most recent call last):
+      ...
+    ValueError: value is not in range that can be represented using supplied parameters
     """
     value = share._value_from_parameters( # pylint: disable=W0212
         value, exponent, signed
