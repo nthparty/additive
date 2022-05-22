@@ -146,6 +146,12 @@ class share:
         >>> ((a, b), (c, d)) = (shares(123), shares(456))
         >>> ((a + c) + (b + d)).to_int()
         579
+        >>> (ss, ts) = (shares(123, 3, signed=True), shares(-100, 3, signed=True))
+        >>> ((ss[0] + ts[0]) + (ss[1] + ts[1]) + (ss[2] + ts[2])).to_int()
+        23
+        >>> ts = [shares(-n, 10, signed=True) for n in [123, 456, 789]]
+        >>> sum(sum(ss) for ss in zip(*ts)).to_int()
+        -1368
 
         An attempt to add secret shares that are represented using
         different finite fields (or are not all signed/unsigned)
@@ -155,17 +161,36 @@ class share:
         Traceback (most recent call last):
           ...
         ValueError: shares must have compatible parameters to be added
+        >>> share(0, 8, signed=True) + share(0, 8, signed=False)
+        Traceback (most recent call last):
+          ...
+        ValueError: shares must have compatible parameters to be added
+
+        The examples below test this addition method for a range of share
+        quantities and addition operation counts.
+
+        >>> for quantity in range(2, 20):
+        ...     for operations in range(2, 20):
+        ...         vs = [
+        ...             int.from_bytes(secrets.token_bytes(2), 'little')
+        ...             for _ in range(operations)
+        ...         ]
+        ...         sss = [shares(v, quantity, signed=True) for v in vs]
+        ...         assert(sum([sum(ss) for ss in zip(*sss)]).to_int() == sum(vs))
         """
         if isinstance(other, int) and other == 0:
             return self
 
         if self.exponent == other.exponent and self.signed == other.signed:
-            s = share(
-                (self.value + other.value) % (2 ** self.exponent),
-                self.exponent
+            return share._from_parameters(
+                (
+                    self.value + \
+                    other.value + \
+                    (2 ** (self.exponent - 1) if self.signed else 0)
+                ) % (2 ** self.exponent),
+                self.exponent,
+                self.signed
             )
-            s.signed = self.signed
-            return s
 
         raise ValueError(
             'shares must have compatible parameters to be added'
@@ -202,6 +227,14 @@ class share:
         >>> (r, s, t) = shares(-123, 3, signed=True)
         >>> sum([r, s, t]).to_int()
         -123
+        >>> (q, r, s, t) = shares(-123, 4, signed=True)
+        >>> sum([q, r, s, t]).to_int()
+        -123
+        >>> all([
+        ...     sum(shares(-123, q, signed=True)).to_int() == -123
+        ...     for q in range(2, 7)
+        ... ])
+        True
         """
         return self.value - (2 ** (self.exponent - 1)) if self.signed else self.value
 
@@ -295,18 +328,40 @@ def shares(
         value, exponent, signed
     )
 
+    # An offset term is added to the representation of every share of a signed
+    # integer. This is necessary because the same operation (*i.e.*, addition)
+    # is used to add secret shares and to reconstruct an integer value from
+    # secret shares. Therefore, it is convenient to assume that all shares
+    # (regardless which one it is or whether it is an initially created
+    # instance or one created in the midst of a workflow) include an offset
+    # term. For every addition operation between two share instances, exactly
+    # one of the two offset terms is removed. Thus, only one offset term must
+    # be removed when a value is reconstructed from shares.
+    offset = (2 ** (exponent - 1)) if signed else 0
+
     (ss, t) = ([], 0)
     for _ in range(quantity - 1):
         bs = secrets.token_bytes(exponent)
-        v = int.from_bytes(bs, 'little') % (2 ** exponent)
+        v = (int.from_bytes(bs, 'little') + offset) % (2 ** exponent)
         ss.append(share._from_parameters( # pylint: disable=W0212
             v, exponent, signed
         ))
         t = (t + v) % (2 ** exponent)
 
     ss.append(share._from_parameters( # pylint: disable=W0212
-        (value + ((2 ** exponent) - t)) % (2 ** exponent),
-        exponent, signed
+        (
+            value + \
+            ((2 ** exponent) - t) + \
+            ( # Subtracting ``t`` in the above removed either an even or odd
+              # number of ``offset`` terms. Thus, when ``quantity - 1`` is odd,
+              # the total of the two terms above would result in a share that
+              # has no offset term. Since this last share should also have an
+              # ``offset`` term, ensure that the term is restored.
+              offset if quantity % 2 == 0 else 0
+            )
+        ) % (2 ** exponent),
+        exponent,
+        signed
     ))
 
     return ss
