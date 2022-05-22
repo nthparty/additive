@@ -165,13 +165,13 @@ class share:
         >>> ((a + c) + (b + d)).to_int() == (255 + 123) % 256 == 122
         True
 
-        In the case of signed integers, the values will wrap from positive
+        In the case of signed integers, the sum will wrap from positive
         to negative (in a manner similar to that of typical implementations
         of signed integer addition in other popular languages and libraries).
 
         >>> (a, b) = shares(127, exponent=8, signed=True)
         >>> (c, d) = shares(2, exponent=8, signed=True)
-        >>> ((a + c) + (b + d)).to_int() == -127
+        >>> ((a + c) + (b + d)).to_int() == -128 + ((127 + 2) % 128) == -127
         True
 
         An attempt to add secret shares that are represented using
@@ -235,6 +235,128 @@ class share:
             return self
 
         return other + self # pragma: no cover
+
+    def __mul__(self: share, scalar: int) -> share:
+        """
+        Multiply this secret share by an integer scalar. Note that all
+        secret shares must be multiplied by the same integer scalar in
+        order for the reconstructed value to reflect the correct effect.
+
+        >>> (s, t) = shares(123)
+        >>> s = s * 2
+        >>> t = t * 2
+        >>> (s + t).to_int()
+        246
+        >>> (s, t) = shares(123, exponent=16, signed=True)
+        >>> s = s * 2
+        >>> t = t * 2
+        >>> (s + t).to_int()
+        246
+        >>> (s, t) = shares(123, exponent=16, signed=True)
+        >>> s = s * -3
+        >>> t = t * -3
+        >>> (s + t).to_int()
+        -369
+
+        Multiplication of shares of signed integers by negative scalars is
+        supported.
+
+        >>> (s, t) = shares(123, exponent=16, signed=True)
+        >>> s = s * -1
+        >>> t = t * -1
+        >>> (s + t).to_int()
+        -123
+
+        When secret shares are multiplied by a scalar, it is not possible to
+        determine whether the result exceeds the range of values that can be
+        represented. If the result does fall outside the range, then the value
+        reconstructed from the shares will wrap around. In the case of unsigned
+        integer values, this corresponds to the usual behavior of field elements.
+
+        >>> (s, t) = shares(129, exponent=8)
+        >>> s = s * 2
+        >>> t = t * 2
+        >>> (s + t).to_int()
+        2
+
+        In the case of signed integers, the result will wrap around the upper
+        or lower boundary of the range that can be represented (in a manner
+        similar to that of typical implementations of signed integer
+        multiplication in other popular languages and libraries).
+
+        >>> (a, b) = shares(65, exponent=8, signed=True)
+        >>> ((2 * a) + (2 * b)).to_int() == -128 + (130 % 128) == -126
+        True
+        >>> (a, b) = shares(65, exponent=8, signed=True)
+        >>> ((-2 * a) + (-2 * b)).to_int() == (-130) % 128 == 126
+        True
+        >>> (a, b) = shares(-65, exponent=8, signed=True)
+        >>> ((-2 * a) + (-2 * b)).to_int() == -128 + (130 % 128) == -126
+        True
+
+        The scalar argument must be an integer.
+
+        >>> (s, t) = shares(123)
+        >>> s = s * 2.0
+        Traceback (most recent call last):
+          ...
+        TypeError: scalar must be an integer
+
+        Shares of unsigned integers cannot be multiplied by a negative scalar.
+
+        >>> (s, t) = shares(123, signed=False)
+        >>> s = s * -2
+        Traceback (most recent call last):
+          ...
+        ValueError: shares of unsigned integers cannot be multiplied by a negative scalar
+
+        The examples below test this scalar multiplication method for a range
+        of share quantities and a number of random scalar values.
+
+        >>> for quantity in range(2, 20):
+        ...     for _ in range(100):
+        ...         v = int.from_bytes(secrets.token_bytes(2), 'little')
+        ...         c = -128 + int.from_bytes(secrets.token_bytes(1), 'little')
+        ...         ss = shares(v, quantity, signed=True)
+        ...         assert(sum([c * s for s in ss]).to_int() == c * v)
+        """
+        if not isinstance(scalar, int):
+            raise TypeError('scalar must be an integer')
+
+        if not self.signed and scalar < 0:
+            raise ValueError(
+                'shares of unsigned integers cannot be multiplied by a negative scalar'
+            )
+
+        # Restore the number of offset terms to be exactly one in the representation of
+        # the signed integer in the share instance returned by this method.
+        offset = (abs(scalar) - 1) * (2 ** (self.exponent - 1)) if self.signed else 0
+
+        return share._from_parameters(
+            value=((self.value * scalar) + offset) % (2 ** self.exponent),
+            exponent=self.exponent,
+            signed=self.signed
+        )
+
+    def __rmul__(self: share, scalar: int) -> share:
+        """
+        Multiply this secret share by an integer scalar. Note that all
+        secret shares must be multiplied by the same integer scalar in
+        order for the reconstructed value to reflect the correct effect.
+
+        >>> (s, t) = shares(123)
+        >>> s = 2 * s
+        >>> t = 2 * t
+        >>> (s + t).to_int()
+        246
+        >>> (r, s, t) = shares(123, 3, signed=True)
+        >>> r = -2 * r
+        >>> s = -2 * s
+        >>> t = -2 * t
+        >>> (r + s + t).to_int()
+        -246
+        """
+        return self * scalar
 
     def to_int(self: share) -> int:
         """
