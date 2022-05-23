@@ -64,7 +64,10 @@ The `share` data structure supports Python's built-in addition operators in orde
     >>> sum([r, s, t]).to_int()
     123
 
-In addition, conversion methods for Base64 strings and bytes-like objects are included to support encoding and decoding of ``share`` objects::
+.. |share| replace:: ``share``
+.. _share: https://additive.readthedocs.io/en/latest/_source/additive.html#additive.additive.share
+
+In addition, conversion methods for Base64 strings and bytes-like objects are included to support encoding and decoding of |share|_ objects::
 
     >>> from additive import share
     >>> share.from_base64('HgEA').to_bytes().hex()

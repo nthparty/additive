@@ -136,7 +136,7 @@ class share:
         """
         Add two secret shares (represented as :obj:`share` objects);
         ``0`` is supported as an input to accommodate the base case
-        required by the Python ``sum`` operator.
+        required by the Python :obj:`sum` operator.
 
         >>> (s, t) = shares(123)
         >>> s + t
@@ -221,7 +221,7 @@ class share:
         """
         Add two secret shares (represented as :obj:`share` objects);
         ``0`` is supported as an input to accommodate the base case
-        required by the Python ``sum`` operator.
+        required by the Python :obj:`sum` operator.
 
         >>> (s, t) = shares(123)
         >>> s + t
@@ -240,7 +240,7 @@ class share:
         """
         Multiply this secret share by an integer scalar. Note that all
         secret shares must be multiplied by the same integer scalar in
-        order for the reconstructed value to reflect the correct effect.
+        order for the reconstructed value to reflect the correct result.
 
         >>> (s, t) = shares(123)
         >>> s = s * 2
@@ -342,7 +342,7 @@ class share:
         """
         Multiply this secret share by an integer scalar. Note that all
         secret shares must be multiplied by the same integer scalar in
-        order for the reconstructed value to reflect the correct effect.
+        order for the reconstructed value to reflect the correct result.
 
         >>> (s, t) = shares(123)
         >>> s = 2 * s
