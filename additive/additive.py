@@ -4,7 +4,7 @@ designed for use within secure multi-party computation (MPC) protocol
 implementations.
 """
 from __future__ import annotations
-from typing import Optional, Union, Sequence
+from typing import Union, Optional, Sequence
 import doctest
 import base64
 import secrets
@@ -409,7 +409,7 @@ class share:
 
     def __str__(self: share) -> str:
         """
-        Return string representation of this :obj:`share` object.
+        Return the string representation of this :obj:`share` object.
 
         >>> str(share(123))
         'share(123, 32, False)'
@@ -422,7 +422,7 @@ class share:
 
     def __repr__(self: share) -> str:
         """
-        Return string representation of this :obj:`share` object.
+        Return the string representation of this :obj:`share` object.
 
         >>> share(123)
         share(123, 32, False)
@@ -430,8 +430,10 @@ class share:
         return str(self)
 
 def shares(
-        value: int, quantity: Optional[int] = 2,
-        exponent: Optional[int] = 32, signed: Optional[bool] = False
+        value: int,
+        quantity: Optional[int] = 2,
+        exponent: Optional[int] = 32,
+        signed: Optional[bool] = False
     ) -> Sequence[share]:
     """
     Convert an integer into two or more secret shares constructed

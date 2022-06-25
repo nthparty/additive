@@ -57,15 +57,15 @@ The number of shares can be specified explicitly (the default is two shares)::
 
     >>> (r, s, t) = shares(123, quantity=3)
 
-The `share` data structure supports Python's built-in addition operators in order to enable both operations on shares and concise reconstruction of values from a collection of secret shares::
+.. |share| replace:: ``share``
+.. _share: https://additive.readthedocs.io/en/latest/_source/additive.html#additive.additive.share
+
+The |share|_ data structure supports Python's built-in addition operators, enabling both operations on shares and concise reconstruction of values from a collection of shares::
 
     >>> (r + s + t).to_int()
     123
     >>> sum([r, s, t]).to_int()
     123
-
-.. |share| replace:: ``share``
-.. _share: https://additive.readthedocs.io/en/latest/_source/additive.html#additive.additive.share
 
 In addition, conversion methods for Base64 strings and bytes-like objects are included to support encoding and decoding of |share|_ objects::
 
