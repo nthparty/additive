@@ -1,0 +1,50 @@
+[project]
+name = "additive"
+version = "0.5.0"
+description = """\
+    Data structure for representing additive secret shares of integers, \
+	designed for use within secure MPC protocol implementations.\
+    """
+license = {file = "LICENSE"}
+authors = [
+    {name = "Andrei Lapets"},
+    {email = "a@lapets.io"}
+]
+readme = "README.rst"
+requires-python = ">=3.7"
+
+[project.urls]
+homepage = "https://github.com/nthparty/additive"
+repository = "https://github.com/nthparty/additive"
+documentation = "https://additive.readthedocs.org"
+
+[project.optional-dependencies]
+docs = [
+    "toml~=0.10.2",
+    "sphinx~=4.2.0",
+    "sphinx-rtd-theme~=1.0.0"
+]
+test = [
+    "pytest~=7.0",
+    "pytest-cov~=3.0"
+]
+lint = [
+    "pylint~=2.14.0"
+]
+coveralls = [
+    "coveralls~=3.3.1"
+]
+publish = [
+    "twine~=4.0"
+]
+
+[build-system]
+requires = [
+    "build~=0.8",
+    "setuptools~=62.0",
+    "wheel~=0.37"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --ignore=docs --cov=additive --cov-report term-missing"
