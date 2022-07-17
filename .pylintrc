@@ -150,7 +150,9 @@ disable=raw-checker-failed,
         suppressed-message,
         useless-suppression,
         deprecated-pragma,
-        use-symbolic-message-instead
+        use-symbolic-message-instead,
+        unnecessary-lambda-assignment,
+        redundant-unittest-assert
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -167,7 +169,7 @@ argument-naming-style=snake_case
 # Regular expression matching correct argument names. Overrides argument-
 # naming-style. If left empty, argument names will be checked with the set
 # naming style.
-argument-rgx=^(_?)[a-z][a-z0-9]*(((_[a-z0-9]+)*)?)(_?)$
+argument-rgx=^(_?)[a-z][a-z0-9]*(_[a-z0-9]+)*$
 
 # Naming style matching correct attribute names.
 attr-naming-style=snake_case
@@ -210,7 +212,7 @@ class-naming-style=PascalCase
 
 # Regular expression matching correct class names. Overrides class-naming-
 # style. If left empty, class names will be checked with the set naming style.
-class-rgx=^[a-z][a-z0-9]*(((_[a-z0-9]+)*)?)$
+class-rgx=^[a-zA-Z][a-z0-9]*(_[a-z0-9]+)*$
 
 # Naming style matching correct constant names.
 const-naming-style=UPPER_CASE
@@ -292,7 +294,7 @@ variable-naming-style=snake_case
 # Regular expression matching correct variable names. Overrides variable-
 # naming-style. If left empty, variable names will be checked with the set
 # naming style.
-variable-rgx=^[a-z][a-z0-9]*(((_[a-z0-9]+)*)?)$
+variable-rgx=^(_?)[a-z][a-z0-9]*(_[a-z0-9]+)*(_?)(_?)$
 
 
 [CLASSES]
@@ -332,7 +334,7 @@ exclude-too-few-public-methods=
 ignored-parents=
 
 # Maximum number of arguments for function / method.
-max-args=5
+max-args=12
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=7
@@ -341,10 +343,10 @@ max-attributes=7
 max-bool-expr=5
 
 # Maximum number of branch for function / method body.
-max-branches=12
+max-branches=40
 
 # Maximum number of locals for function / method body.
-max-locals=15
+max-locals=30
 
 # Maximum number of parents for a class (see R0901).
 max-parents=7
@@ -353,13 +355,13 @@ max-parents=7
 max-public-methods=20
 
 # Maximum number of return / yield for function / method body.
-max-returns=6
+max-returns=40
 
 # Maximum number of statements in function / method body.
-max-statements=50
+max-statements=100
 
 # Minimum number of public methods for a class (see R0903).
-min-public-methods=2
+min-public-methods=0
 
 
 [EXCEPTIONS]
@@ -385,10 +387,10 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=120
 
 # Maximum number of lines in a module.
-max-module-lines=1000
+max-module-lines=3000
 
 # Allow the body of a class to be on the same line as the declaration if body
 # contains single statement.

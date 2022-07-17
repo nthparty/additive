@@ -20,7 +20,7 @@ class share:
         this flag affects the specific way in which a secret share is
         represented internally and shifts the range of integer values that
         can be represented from ``range(0, 2 ** exponent)`` to
-        ``[-(2 ** (exponent - 1)), (2 ** (exponent - 1)) - 1)``.
+        ``range(-(2 ** (exponent - 1)), (2 ** (exponent - 1)))``.
 
     Normally, the :obj:`shares` function should be used to construct a list
     of :obj:`share` objects that have correct internal structure.
@@ -74,7 +74,7 @@ class share:
         maximum = 2 ** (exponent - 1 if signed else exponent)
         if not minimum <= value < maximum:
             raise ValueError(
-                'value is not in range that can be represented using ' + \
+                'value is not in range that can be represented using ' +
                 'supplied parameters'
             )
 
@@ -205,8 +205,8 @@ class share:
         if self.exponent == other.exponent and self.signed == other.signed:
             return share._from_parameters(
                 (
-                    self.value + \
-                    other.value + \
+                    self.value +
+                    other.value +
                     (2 ** (self.exponent - 1) if self.signed else 0)
                 ) % (2 ** self.exponent),
                 self.exponent,
@@ -252,15 +252,15 @@ class share:
         >>> t = t * 2
         >>> (s + t).to_int()
         246
+
+        Multiplication of shares of signed integers by negative scalars is
+        supported.
+
         >>> (s, t) = shares(123, exponent=16, signed=True)
         >>> s = s * -3
         >>> t = t * -3
         >>> (s + t).to_int()
         -369
-
-        Multiplication of shares of signed integers by negative scalars is
-        supported.
-
         >>> (s, t) = shares(123, exponent=16, signed=True)
         >>> s = s * -1
         >>> t = t * -1
@@ -276,8 +276,8 @@ class share:
         >>> (s, t) = shares(129, exponent=8)
         >>> s = s * 2
         >>> t = t * 2
-        >>> (s + t).to_int()
-        2
+        >>> (s + t).to_int() == (129 * 2) % (2 ** 8) == 2
+        True
 
         In the case of signed integers, the result will wrap around the upper
         or lower boundary of the range that can be represented (in a manner
@@ -391,9 +391,10 @@ class share:
         >>> sum(share.from_bytes(s) for s in ss).to_int()
         123
         """
-        return \
-            bytes([((self.exponent - 1) << 1) + int(self.signed)]) + \
+        return (
+            bytes([((self.exponent - 1) << 1) + int(self.signed)]) +
             self.value.to_bytes(self.exponent // 8, 'little')
+        )
 
     def to_base64(self: share) -> str:
         """
@@ -481,7 +482,7 @@ def shares(
       ...
     ValueError: value is not in range that can be represented using supplied parameters
     """
-    value = share._value_from_parameters( # pylint: disable=W0212
+    value = share._value_from_parameters( # pylint: disable=protected-access
         value, exponent, signed
     )
 
@@ -500,15 +501,15 @@ def shares(
     for _ in range(quantity - 1):
         bs = secrets.token_bytes(exponent)
         v = (int.from_bytes(bs, 'little') + offset) % (2 ** exponent)
-        ss.append(share._from_parameters( # pylint: disable=W0212
+        ss.append(share._from_parameters( # pylint: disable=protected-access
             v, exponent, signed
         ))
         t = (t + v) % (2 ** exponent)
 
-    ss.append(share._from_parameters( # pylint: disable=W0212
+    ss.append(share._from_parameters( # pylint: disable=protected-access
         (
-            value + \
-            ((2 ** exponent) - t) + \
+            value +
+            ((2 ** exponent) - t) +
             ( # Subtracting ``t`` in the above removed either an even or odd
               # number of ``offset`` terms. Thus, when ``quantity - 1`` is odd,
               # the total of the two terms above would result in a share that
@@ -523,5 +524,5 @@ def shares(
 
     return ss
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     doctest.testmod() # pragma: no cover
