@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, os.path.abspath('../src')) # Prioritize local module copy.
 
 
 # -- Project information -----------------------------------------------------
@@ -76,7 +76,7 @@ autodoc_preserve_defaults = True
 
 # Allow references/links to definitions found in the Python documentation.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None)
+    'python': ('https://docs.python.org/3', None),
 }
 
 

@@ -3,9 +3,9 @@ name = "additive"
 version = "0.5.0"
 description = """\
     Data structure for representing additive secret shares of integers, \
-	designed for use within secure MPC protocol implementations.\
+    designed for use within secure MPC protocol implementations.\
     """
-license = {file = "LICENSE"}
+license = {text = "MIT"}
 authors = [
     {name = "Andrei Lapets"},
     {email = "a@lapets.io"}
@@ -14,9 +14,8 @@ readme = "README.rst"
 requires-python = ">=3.7"
 
 [project.urls]
-homepage = "https://github.com/nthparty/additive"
-repository = "https://github.com/nthparty/additive"
-documentation = "https://additive.readthedocs.org"
+Repository = "https://github.com/nthparty/additive"
+Documentation = "https://additive.readthedocs.io"
 
 [project.optional-dependencies]
 docs = [
@@ -36,14 +35,13 @@ coveralls = [
     "coveralls~=3.3.1"
 ]
 publish = [
+    "build~=0.8",
     "twine~=4.0"
 ]
 
 [build-system]
 requires = [
-    "build~=0.8",
-    "setuptools~=62.0",
-    "wheel~=0.37"
+    "setuptools~=62.0"
 ]
 build-backend = "setuptools.build_meta"
 
