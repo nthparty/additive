@@ -1,6 +1,6 @@
 [project]
 name = "additive"
-version = "0.5.0"
+version = "0.6.0"
 description = """\
     Data structure for representing additive secret shares of integers, \
     designed for use within secure MPC protocol implementations.\

@@ -58,7 +58,7 @@ The number of shares can be specified explicitly (the default is two shares)::
     >>> (r, s, t) = shares(123, quantity=3)
 
 .. |share| replace:: ``share``
-.. _share: https://additive.readthedocs.io/en/0.5.0/_source/additive.html#additive.additive.share
+.. _share: https://additive.readthedocs.io/en/0.6.0/_source/additive.html#additive.additive.share
 
 The |share|_ data structure supports Python's built-in addition operators, enabling both operations on shares and concise reconstruction of values from a collection of shares::
 
